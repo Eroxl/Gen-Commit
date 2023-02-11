@@ -1,0 +1,6 @@
+{
+  "ignore": [ "node_modules"],
+  "watch": ["src", "package.json", "yarn.lock"],
+  "exec": "yarn start",
+  "ext": "ts"
+}
