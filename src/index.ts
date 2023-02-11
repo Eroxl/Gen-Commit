@@ -62,6 +62,11 @@ const formatPrompt = (diff: string, prompt: string) => `${prompt}\n\n${diff}\n\n
 const diff = getDiff();
 const prompt = formatPrompt(diff, PROMPT);
 
+if (prompt.length > 2048) {
+  console.log('The prompt is too long. Please try again with fewer changes.');
+  process.exit(1);
+}
+
 const completion = await openai.createCompletion({
   model: "text-davinci-003",
   prompt,
