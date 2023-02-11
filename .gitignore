@@ -1,2 +1,12 @@
 # -=- MacOS -=-
 .DS_Store
+
+# -=- Node Modules -=-
+node_modules
+
+# -=- TypeScript -=-
+*.tsbuildinfo
+dist
+
+# -=- Secrets -=-
+secrets.json

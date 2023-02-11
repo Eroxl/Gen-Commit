@@ -1,0 +1,19 @@
+{
+  "name": "git-auto-message",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "repository": "github.com/Eroxl/Git-Auto-Message",
+  "author": "Eroxl <evan@erox.one>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsc && node ./"
+  },
+  "dependencies": {
+    "openai": "^3.1.0",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "@types/node": "^18.13.0"
+  }
+}
