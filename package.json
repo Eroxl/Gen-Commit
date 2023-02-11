@@ -1,5 +1,5 @@
 {
-  "name": "git-auto-message",
+  "name": "gen-commit",
   "version": "1.0.0",
   "main": "dist/index.js",
   "repository": "github.com/Eroxl/Git-Auto-Message",
