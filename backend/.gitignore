@@ -1,8 +1,0 @@
-# -=- Node Modules -=-
-node_modules/
-
-# -=- Typescript -=-
-dist/
-
-# -=- Environment Variables -=-
-.env
