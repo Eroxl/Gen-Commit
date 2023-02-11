@@ -60,6 +60,7 @@ const CommitMessages = (props: CommitMessageProps) => {
         items={commitMessages.map((commitMessage) => ({ label: commitMessage, value: commitMessage }))}
         onSelect={(item) => {
           execSync(`git commit -m "${item.value}"`);
+          process.exit(0);
         }}
         indicatorComponent={SelectionIndicator}
         itemComponent={SelectionItem}
