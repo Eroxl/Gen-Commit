@@ -1,7 +1,7 @@
 {
   "name": "gen-commit",
   "description": "A CLI tool to automatically generate commit messages using GPT-3",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "repository": "github.com/Eroxl/Git-Auto-Message",
   "author": "Eroxl <evan@erox.one>",
