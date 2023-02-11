@@ -70,7 +70,15 @@ const CommitMessages = (props: CommitMessageProps) => {
       <Text color="greenBright">Select a commit message:</Text>
       <Box height={1} />
       <SelectInput
-        items={commitMessages.map((commitMessage) => ({ label: commitMessage, value: commitMessage }))}
+        items={
+          commitMessages.map(
+            (commitMessage, index) => ({
+              label: commitMessage,
+              value: commitMessage,
+              key: `${commitMessage}-${index}`
+            })
+          )
+        }
         onSelect={(item) => {
           execSync(`git commit -m "${item.value}"`);
           process.exit(0);
