@@ -55,10 +55,13 @@ const CommitMessages = (props: CommitMessageProps) => {
 
   if (commitMessages.length === 0) {
     return (
-      <Box flexDirection="column">
+      <Text color="greenBright">
         <Spinner type="dots" />
-        <Text color="greenBright">Generating commit messages...</Text>
-      </Box>
+        <Text>
+          {' '}
+          Generating commit messages...
+        </Text>
+      </Text>
     );
   }
 
