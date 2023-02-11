@@ -14,7 +14,7 @@ npx gen-commit
 
 # 📖 Example
 
-<img src="./images/Example Screenshot.png" alt="Example" width="500 "/>
+<img src="https://raw.githubusercontent.com/Eroxl/Gen-Commit/main/images/Example%20Screenshot.png" alt="Example" width="500 "/>
 
 # ❓ Info
 
