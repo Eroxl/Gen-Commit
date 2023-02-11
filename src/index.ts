@@ -62,7 +62,7 @@ const formatPrompt = (diff: string, prompt: string) => `${prompt}\n\n${diff}\n\n
 const diff = getDiff();
 const prompt = formatPrompt(diff, PROMPT);
 
-if (prompt.length > 2048) {
+if (prompt.length > (4096 * 5)) {
   console.log('The prompt is too long. Please try again with fewer changes.');
   process.exit(1);
 }
