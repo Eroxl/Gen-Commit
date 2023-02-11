@@ -77,4 +77,5 @@ const commitMessages = completion.data.choices.map(
   (choice) => choice.text?.replace(/(^[\s"]+|[\s"]+$|[\r]+|[\n]+)/g, '') || ''
 )
 
-console.log('Commit Messages:\n\n*', commitMessages.join('\n* '));
+console.log('Commit Messages:');
+commitMessages.forEach((message, index) => console.log(`- ${message}`));
