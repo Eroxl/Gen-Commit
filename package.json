@@ -5,12 +5,15 @@
   "repository": "github.com/Eroxl/Git-Auto-Message",
   "author": "Eroxl <evan@erox.one>",
   "license": "MIT",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "start": "tsc && node ./"
+    "start": "yarn tsc && node ./"
   },
   "dependencies": {
+    "@types/ink": "^2.0.3",
+    "@types/react": "^18.0.27",
     "ink": "^3.2.0",
+    "ink-select-input": "^4.2.1",
     "openai": "^3.1.0",
     "react": "^18.2.0",
     "typescript": "^4.9.5"

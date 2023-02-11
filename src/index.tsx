@@ -2,7 +2,11 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { createInterface } from 'readline/promises';
 
+import React from 'react';
 import { OpenAIApi, Configuration } from 'openai';
+import { render } from 'ink';
+
+import CommitMessages from './gui/CommitMessages';
 
 const PROMPT = `
 I want you to act as a senior software developer.
@@ -39,43 +43,37 @@ const getApiKey = async () => {
 };
 
 // -=- Create the OpenAI API client -=-
-const apiKey = await getApiKey();
-const config = new Configuration({ apiKey });
-const openai = new OpenAIApi(config);
+(async () => {
+  const apiKey = await getApiKey();
+  const config = new Configuration({ apiKey });
+  const openai = new OpenAIApi(config);
 
-const getDiff = () => {
-  try {
-    const diff = execSync('git diff --cached').toString();
-    if (!diff) {
-      console.log('No changes to commit.');
-      process.exit(0);
+  const getDiff = () => {
+    try {
+      const diff = execSync('git diff --cached').toString();
+      if (!diff) {
+        console.log('No changes to commit.');
+        process.exit(0);
+      }
+      return diff;
+    } catch (e) {
+      console.log('Failed to run git diff --cached');
+      process.exit(1);
     }
-    return diff;
-  } catch (e) {
-    console.log('Failed to run git diff --cached');
+  };
+
+  const formatPrompt = (diff: string, prompt: string) => `${prompt}\n\n${diff}\n\nCommit Message:`;
+
+  const diff = getDiff();
+  const prompt = formatPrompt(diff, PROMPT);
+
+  if (prompt.length > (4096 * 5)) {
+    console.log('The prompt is too long. Please try again with fewer changes.');
     process.exit(1);
   }
-};
 
-const formatPrompt = (diff: string, prompt: string) => `${prompt}\n\n${diff}\n\nCommit Message:`;
-
-const diff = getDiff();
-const prompt = formatPrompt(diff, PROMPT);
-
-if (prompt.length > (4096 * 5)) {
-  console.log('The prompt is too long. Please try again with fewer changes.');
-  process.exit(1);
-}
-
-const completion = await openai.createCompletion({
-  model: "text-davinci-003",
-  prompt,
-  n: 5,
-});
-
-const commitMessages = completion.data.choices.map(
-  (choice) => choice.text?.replace(/(^[\s"]+|[\s"]+$|[\r]+|[\n]+)/g, '') || ''
-)
-
-console.log('Commit Messages:');
-commitMessages.forEach((message, index) => console.log(`- ${message}`));
+  // -=- Create the completion request -=-
+  render(
+    <CommitMessages prompt={prompt} openai={openai} />
+  );
+})();
