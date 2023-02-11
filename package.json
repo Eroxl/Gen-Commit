@@ -14,6 +14,7 @@
     "@types/react": "^18.0.27",
     "ink": "^3.2.0",
     "ink-select-input": "^4.2.1",
+    "ink-spinner": "^4.0.3",
     "openai": "^3.1.0",
     "react": "^18.2.0",
     "typescript": "^4.9.5"

@@ -3,6 +3,7 @@ import type { OpenAIApi } from 'openai';
 import React, {useState, useEffect} from 'react';
 
 import { Box, Text } from 'ink';
+import Spinner from 'ink-spinner';
 import SelectInput from 'ink-select-input';
 
 interface CommitMessageProps {
@@ -51,6 +52,15 @@ const CommitMessages = (props: CommitMessageProps) => {
   useEffect(() => {
     generateCommitMessages();
   }, []);
+
+  if (commitMessages.length === 0) {
+    return (
+      <Box flexDirection="column">
+        <Spinner type="dots" />
+        <Text color="greenBright">Generating commit messages...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box flexDirection="column">
