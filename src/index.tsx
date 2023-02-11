@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { createInterface } from 'readline/promises';
@@ -18,11 +20,13 @@ The commit message will follow the standard format and should be no longer than 
 const getApiKey = async () => {
   // -=- Check if secrets.json exists and contains the API key -=-
 
-  if (!existsSync('./secrets.json')) {
-    writeFileSync('./secrets.json', '{}');
+  const secretsPath = `${__dirname}/secrets.json`;
+
+  if (!existsSync(secretsPath)) {
+    writeFileSync(secretsPath, JSON.stringify({}));
   }
 
-  const secretsFile = readFileSync('./secrets.json', 'utf8');    
+  const secretsFile = readFileSync(secretsPath, 'utf8');    
 
   const secrets = JSON.parse(secretsFile);
   if (!secrets.OPENAI_API_KEY) {
@@ -36,7 +40,7 @@ const getApiKey = async () => {
     const apiKey = await rl.question('OpenAI API Key: ');
       
     secrets.OPENAI_API_KEY = apiKey;
-    writeFileSync('./secrets.json', JSON.stringify(secrets, null, 2));
+    writeFileSync(secretsPath, JSON.stringify(secrets, null, 2));
   }
 
   return secrets.OPENAI_API_KEY as string;

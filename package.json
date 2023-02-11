@@ -9,6 +9,9 @@
   "scripts": {
     "start": "yarn tsc && node ./"
   },
+  "bin": {
+    "gen-commit": "dist/index.js"
+  },
   "dependencies": {
     "@types/ink": "^2.0.3",
     "@types/react": "^18.0.27",
