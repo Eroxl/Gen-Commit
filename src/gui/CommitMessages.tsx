@@ -1,39 +1,25 @@
 import { execSync } from 'child_process';
-import type { OpenAIApi } from 'openai';
-import React, {useState, useEffect} from 'react';
 
-import { Box, Text } from 'ink';
+import type { OpenAIApi } from 'openai';
+import React, { useState, useEffect } from 'react';
+import type { Item } from 'ink-select-input/build/SelectInput';
+import { Box, Newline, Text } from 'ink';
 import Spinner from 'ink-spinner';
 import SelectInput from 'ink-select-input';
+import TextInput from 'ink-text-input';
+
+import SelectionItem from './SelectionIndicator';
+import SelectionIndicator from './SelectionIndicator';
 
 interface CommitMessageProps {
   prompt: string;
   openai: OpenAIApi;
 }
 
-interface SelectItemProps {
-  label: string;
-  isSelected?: boolean;
-}
-
-const SelectionIndicator = ({ isSelected }: SelectItemProps) => (
-  <Box marginRight={1}>
-    {isSelected
-      ? <Text color="greenBright">&gt;</Text>
-      : <Text> </Text>
-    }
-  </Box>
-);
-
-const SelectionItem = ({ label, isSelected }: SelectItemProps) => (
-  <Box>
-    <Text color={isSelected ? 'greenBright' : ''}>{label}</Text>
-  </Box>
-);
-
 const CommitMessages = (props: CommitMessageProps) => {
   const { prompt, openai } = props;
   const [commitMessages, setCommitMessages] = useState<string[]>([]);
+  const [selectedCommitMessage, setSelectedCommitMessage] = useState<string>('');
 
   const generateCommitMessages = async () => {
     const completion = await openai.createCompletion({
@@ -46,11 +32,25 @@ const CommitMessages = (props: CommitMessageProps) => {
       (choice) => choice.text?.replace(/(^[\s"]+|[\s"]+$|[\r]+|[\n]+)/g, '') || ''
     )
 
-    setCommitMessages(commitMessages);
+    return commitMessages;
+  }
+
+  const onSelect = (item: Item<string>) => {
+    if (item.value === 'generate') {
+      generateCommitMessages().then((commitMessages) => {
+        setCommitMessages(commitMessages);
+      });
+
+      return;
+    }
+
+    setSelectedCommitMessage(item.value);
   }
 
   useEffect(() => {
-    generateCommitMessages();
+    generateCommitMessages().then((commitMessages) => {
+      setCommitMessages(commitMessages);
+    });
   }, []);
 
   if (commitMessages.length === 0) {
@@ -65,24 +65,48 @@ const CommitMessages = (props: CommitMessageProps) => {
     );
   }
 
+  if (selectedCommitMessage) {
+    return (
+      <Box flexDirection="column">
+        <Text color="greenBright">Edit commit message: </Text>
+        <Newline />
+        <Box height={1} />
+        <TextInput
+          value={commitMessages[0]}
+          onChange={(value) => {
+            setCommitMessages([value]);
+          }}
+          onSubmit={(value) => {
+            execSync(`git commit -m "${value}"`);
+            process.exit(0);
+          }}
+        />
+      </Box>
+    );
+  }
+
   return (
     <Box flexDirection="column">
       <Text color="greenBright">Select a commit message:</Text>
       <Box height={1} />
       <SelectInput
         items={
-          commitMessages.map(
-            (commitMessage, index) => ({
-              label: commitMessage,
-              value: commitMessage,
-              key: `${commitMessage}-${index}`
-            })
-          )
+          [
+            ...commitMessages.map(
+              (commitMessage, index) => ({
+                label: commitMessage,
+                value: commitMessage,
+                key: `${commitMessage}-${index}`
+              })
+            ),
+            {
+              label: 'Generate more commit messages',
+              value: 'generate',
+              key: 'generate-more'
+            }
+          ]
         }
-        onSelect={(item) => {
-          execSync(`git commit -m "${item.value}"`);
-          process.exit(0);
-        }}
+        onSelect={onSelect}
         indicatorComponent={SelectionIndicator}
         itemComponent={SelectionItem}
       />
