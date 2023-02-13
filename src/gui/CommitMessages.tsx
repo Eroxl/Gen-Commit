@@ -37,6 +37,8 @@ const CommitMessages = (props: CommitMessageProps) => {
 
   const onSelect = (item: Item<string>) => {
     if (item.value === 'generate') {
+      setCommitMessages([]);
+
       generateCommitMessages().then((commitMessages) => {
         setCommitMessages(commitMessages);
       });
@@ -69,10 +71,8 @@ const CommitMessages = (props: CommitMessageProps) => {
     return (
       <Box flexDirection="column">
         <Text color="greenBright">Edit commit message: </Text>
-        <Newline />
-        <Box height={1} />
         <TextInput
-          value={commitMessages[0]}
+          value={selectedCommitMessage}
           onChange={(value) => {
             setCommitMessages([value]);
           }}
