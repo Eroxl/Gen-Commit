@@ -12,8 +12,8 @@ import CommitMessages from './gui/CommitMessages';
 
 const PROMPT = `
 I want you to act as a senior software developer.
-I will give you a git diff and you will reply with a clear and concise git commitmessage.
-The commit message will follow the standard format and should be no longer than 1 line.
+I will give you a git diff and you will reply with a clear and concise git commit message.
+The commit message will follow the standard format and should be no longer than 40 characters.
 `;
 
 // -=- Ensure the API key is set -=-
@@ -66,18 +66,15 @@ const getApiKey = async () => {
     }
   };
 
-  const formatPrompt = (diff: string, prompt: string) => `${prompt}\n\n${diff}\n\nCommit Message:`;
-
   const diff = getDiff();
-  const prompt = formatPrompt(diff, PROMPT);
 
-  if (prompt.length > (4096 * 5)) {
-    console.log('The prompt is too long. Please try again with fewer changes.');
+  if (diff.length > (4096 * 5)) {
+    console.log('The diff is too large. Please try again with fewer changes.');
     process.exit(1);
   }
 
   // -=- Create the completion request -=-
   render(
-    <CommitMessages prompt={prompt} openai={openai} />
+    <CommitMessages prePrompt={PROMPT} diff={diff} openai={openai} />
   );
 })();
