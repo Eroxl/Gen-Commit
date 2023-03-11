@@ -84,7 +84,7 @@ const CommitMessages = (props: CommitMessageProps) => {
         <TextInput
           value={selectedCommitMessage}
           onChange={(value) => {
-            setCommitMessages([value]);
+            setSelectedCommitMessage(value);
           }}
           onSubmit={(value) => {
             execSync(`git commit -m "${value}"`);
